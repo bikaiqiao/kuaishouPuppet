@@ -1,11 +1,11 @@
 import { VERSION }    from './version'
-import { PuppetMock } from './puppet-mock'
+import { PuppetKuaishou } from './puppet-kuaishou'
 
 import * as mock from './mock/mod'
 
 export {
   VERSION,
-  PuppetMock,
+  PuppetKuaishou,
   mock,
 }
-export default PuppetMock
+export default puppetKuaishou

@@ -40,12 +40,14 @@ import {
   MiniProgramPayload,
 
   log,
+  MessageType,
 }                           from 'wechaty-puppet'
 
 import {
   CHATIE_OFFICIAL_ACCOUNT_QRCODE,
   qrCodeForChatie,
   VERSION,
+  config,
 }                                   from './config'
 
 // import { Attachment } from './mock/user/types'
@@ -59,14 +61,19 @@ import {
 export type PuppetMockOptions = PuppetOptions & {
   mocker?: Mocker,
 }
+const net = require('net')
 
-class PuppetMock extends Puppet {
+const messageStroe = {} as any
+
+class PuppetKuaishou extends Puppet {
 
   public static readonly VERSION = VERSION
 
   private loopTimer?: NodeJS.Timer
 
   public mocker: Mocker
+
+  private client = new net.Socket()
 
   constructor (
     public options: PuppetMockOptions = {},
@@ -96,7 +103,24 @@ class PuppetMock extends Puppet {
 
     this.state.on('pending')
 
+    // client.setEncoding('binary');
+    // 开始连接socket
+    // 连接到服务端
+    this.client.connect(config.port, config.host, function () {
+      log.verbose('连接成功')
+    })
+    this.client.on('data',  (data: string) => {
+      log.verbose('from server:' + data)
+
+      var payload = JSON.parse(data)
+
+      messageStroe[payload.msgId] = payload
+
+      this.emit('message', { messageId: payload.msgId })
+    })
     // Do some async initializing tasks
+
+    this.id = 'id_for_kuaishou'
 
     this.state.on(true)
 
@@ -311,10 +335,22 @@ class PuppetMock extends Puppet {
     }
   }
 
-  public async messageRawPayloadParser (payload: MessagePayload) { return payload }
-  public async messageRawPayload (id: string): Promise<MessagePayload> {
+  public async messageRawPayloadParser (kuaishouPayload: any): Promise<MessagePayload> {
+    // Kuaishou MessagePayload => Puppet Message Payload
+    const payload : MessagePayload = {
+      fromId       : kuaishouPayload.fromUserName,
+      id            : kuaishouPayload.msgId,
+      text         : kuaishouPayload.content,
+      timestamp     : Date.now(),
+      toId         : kuaishouPayload.toUserName,
+      type          : MessageType.Text,
+    }
+    return payload
+  }
+
+  public async messageRawPayload (id: string): Promise<any> {
     log.verbose('PuppetMock', 'messageRawPayload(%s)', id)
-    return this.mocker.messagePayload(id)
+    return messageStroe[id]
   }
 
   private async messageSend (
@@ -326,16 +362,7 @@ class PuppetMock extends Puppet {
       throw new Error('no this.id')
     }
 
-    const user = this.mocker.ContactMock.load(this.id)
-    let conversation
-
-    if (/@/.test(conversationId)) {
-      // FIXME: extend a new puppet method messageRoomSendText, etc, for Room message?
-      conversation = this.mocker.RoomMock.load(conversationId)
-    } else {
-      conversation = this.mocker.ContactMock.load(conversationId)
-    }
-    user.say(something).to(conversation)
+    this.client.write(something + '\r\n')
   }
 
   public async messageSendText (
@@ -589,5 +616,5 @@ class PuppetMock extends Puppet {
 
 }
 
-export { PuppetMock }
-export default PuppetMock
+export { PuppetKuaishou }
+export default PuppetKuaishou

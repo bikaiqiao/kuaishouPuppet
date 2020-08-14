@@ -7,7 +7,7 @@ import {
   log,
 }                     from 'wechaty-puppet'
 
-import { PuppetMock } from '../puppet-mock'
+import { PuppetKuaishou } from '../puppet-kuaishou'
 
 import {
   ContactMock,

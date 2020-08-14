@@ -2,9 +2,9 @@
 
 import test  from 'blue-tape'
 
-import { PuppetMock } from './puppet-mock'
+import { PuppetKuaishou } from './puppet-kuaishou'
 
-class PuppetMockTest extends PuppetMock {
+class PuppetMockTest extends PuppetKuaishou {
 }
 
 test('PuppetMock perfect restart testing', async (t) => {
