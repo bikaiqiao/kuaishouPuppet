@@ -44,9 +44,9 @@ class Mocker {
   protected environmentList          : EnvironmentMock[]
   protected environmentCleanupFnList : (() => void)[]
 
-  protected _puppet?: PuppetMock
+  protected _puppet?: PuppetKuaishou
 
-  set puppet (puppet: PuppetMock) {
+  set puppet (puppet: PuppetKuaishou) {
     if (this._puppet) {
       throw new Error('puppet has already been set before. can not be set twice.')
     }

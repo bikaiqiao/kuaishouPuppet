@@ -24,14 +24,14 @@ import {
   EventMessagePayload,
 }                         from 'wechaty-puppet'
 
-import { PuppetMock } from '../src/mod'
+import { PuppetKuaishou } from '../src/mod'
 
 /**
  *
  * 1. Declare your Bot!
  *
  */
-const puppet = new PuppetMock()
+const puppet = new PuppetKuaishou()
 
 /**
  *
@@ -109,6 +109,15 @@ function onError (payload: EventErrorPayload) {
  */
 async function onMessage (payload: EventMessagePayload) {
   const msgPayload = await puppet.messagePayload(payload.messageId)
+
+  if (msgPayload.text === 'ding') {
+    console.info('ding found')
+    await puppet.messageSendText('bot', 'dong\r\n')
+  } else {
+    console.info('no ding found')
+    await puppet.messageSendText('bot', 'ding Please\r\n')
+  }
+
   console.info(JSON.stringify(msgPayload))
 }
 

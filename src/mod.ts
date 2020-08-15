@@ -8,4 +8,4 @@ export {
   PuppetKuaishou,
   mock,
 }
-export default puppetKuaishou
+export default PuppetKuaishou
