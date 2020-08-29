@@ -148,9 +148,8 @@ Initial version.
 * Code released under the Apache-2.0 License
 * Docs released under Creative Commons
 
-
-first start up autoPro.js
-second start up kuaishou app
-third enter the message page
-fourth start up the script(as server)
-fifth start up the puppet
+1. first start up autoPro.js
+1. second start up kuaishou app
+1. third enter the message page
+1. fourth start up the script(as server)
+1. fifth start up the puppet
