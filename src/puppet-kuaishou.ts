@@ -361,8 +361,8 @@ class PuppetKuaishou extends Puppet {
     if (!this.id) {
       throw new Error('no this.id')
     }
-
-    this.client.write(something + '\r\n')
+    var message = something + '\n'
+    this.client.write(message)
   }
 
   public async messageSendText (

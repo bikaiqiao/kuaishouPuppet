@@ -112,15 +112,16 @@ async function onMessage (payload: EventMessagePayload) {
 
   if (msgPayload.text === 'ding') {
     console.info('ding found')
-    await puppet.messageSendText('bot', 'dong\r\n')
+    await puppet.messageSendText('bot', 'dong')
+    console.info('外部传进入的参数为' + 'dong')
   } else {
     console.info('no ding found')
-    await puppet.messageSendText('bot', 'ding Please\r\n')
+    await puppet.messageSendText('bot', 'ding Please')
+    console.info('外部传进入的参数为' + 'ding Please')
   }
 
   console.info(JSON.stringify(msgPayload))
 }
-
 /**
  *
  * 7. Output the Welcome Message
