@@ -32,6 +32,7 @@ import { PuppetKuaishou } from '../src/mod'
  *
  */
 const puppet = new PuppetKuaishou()
+const fs = require('fs')
 
 /**
  *
@@ -109,11 +110,16 @@ function onError (payload: EventErrorPayload) {
  */
 async function onMessage (payload: EventMessagePayload) {
   const msgPayload = await puppet.messagePayload(payload.messageId)
-
   if (msgPayload.text === 'ding') {
     console.info('ding found')
     await puppet.messageSendText('bot', 'dong')
     console.info('外部传进入的参数为' + 'dong')
+  } else if (msgPayload.text.search('data:image')) {
+    var base64Data = msgPayload.text.replace(/^data:image\/\w+;base64,/, '')
+    var imageBitmap = Buffer.from(base64Data, 'base64')
+    // 解码jpg图片
+    fs.writeFileSync('end.jpg', imageBitmap)
+    await puppet.messageSendText('bot', '收到图片')
   } else {
     console.info('no ding found')
     await puppet.messageSendText('bot', 'ding Please')
