@@ -5,5 +5,3 @@
 1. third enter the message page
 1. fourth start up the script(as server)
 1. fifth start up the puppet
-
-
